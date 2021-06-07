@@ -80,7 +80,9 @@
                         document.getElementById("districtdrp").innerHTML = msg;
                         
                        
-                    }
+                    }else if(this.readyState == 4 && this.status != 200){
+					document.getElementById("errorlbl").innerHTML = "<b style=\"color: red;\">Service Not Available<b>";
+				}
                 };
                 
                 xhttp.open("GET", "https://cdn-api.co-vin.in/api/v2/admin/location/districts/"+district, true);
@@ -130,7 +132,9 @@
                         document.getElementById("day").innerHTML = msg;
                         document.getElementById("date").innerHTML = "Date:"+today;
                        
-                    }
+                    }else if(this.readyState == 4 && this.status != 200){
+					document.getElementById("errorlbl").innerHTML = "<b style=\"color: red;\">Service Not Available<b>";
+				}
                 };
                 
                 xhttp.open("GET", "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id="+district_id+"&date="+currDate, true);
