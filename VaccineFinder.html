@@ -1,5 +1,5 @@
 <html>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <head>    
         <style>
             table {
@@ -18,6 +18,8 @@
             tr:nth-child(even) {
               background-color: #dddddd;
             }
+			
+			@media only screen and (min-width: 600px) {
             /* Three image containers (use 25% for four, and 50% for two, etc) */
             .column {
             float: left;
@@ -31,6 +33,7 @@
             clear: both;
             display: table;
             }
+			}
             </style>    
         <script>               
         var DEFAULT_MSG = "No Slots Free"; 
@@ -52,7 +55,9 @@
                         document.getElementById("statedrp").innerHTML = msg;
                         
                        
-                    }
+                    }else if(this.readyState == 4 && this.status != 200){
+					document.getElementById("errorlbl").innerHTML = "<b style=\"color: red;\">Service Not Available<b>";
+				}
                 };
                 
                 xhttp.open("GET", "https://cdn-api.co-vin.in/api/v2/admin/location/states", true);
@@ -84,10 +89,26 @@
         }
         
 
-        function searchSlot(){                
-                var district_id = document.getElementById("hidDistrct").value;//Kollam-298 ;TVM-296;pathanamthitta-300
-                var ageGrp = document.querySelector('input[name="ageGrp"]:checked').value;                
-                var dose = document.querySelector('input[name="doseGrp"]:checked').value; 
+        function searchSlot(){         
+				var district_id ="";
+				var ageGrp = "";
+				var dose ="";
+				
+				if(document.getElementById("hidDistrct")){
+					district_id = document.getElementById("hidDistrct").value;
+				}
+					
+				if(document.querySelector('input[name="ageGrp"]:checked')){
+					ageGrp = document.querySelector('input[name="ageGrp"]:checked').value;  
+				}
+                
+                if(document.querySelector('input[name="doseGrp"]:checked')){
+					dose = document.querySelector('input[name="doseGrp"]:checked').value; 
+				}
+				
+				if(district_id === "" || ageGrp === "" || dose === ""){
+					return;
+				}
                 
                 var today = new Date();
                 var dd = today.getDate();
@@ -132,6 +153,7 @@
                                     "<td>Avail-"+sessions[j].available_capacity_dose1+"</td>"+
                                     "<td>FeeType-"+centers[i].fee_type+"</td>"+
                                     "<td>District-"+centers[i].district_name+"</td>"+
+									"<td>PinCode-"+centers[i].pincode+"</td>"+
                                     "<td>AgeLimit-"+sessions[j].min_age_limit+"</td>"+
                                     "<td>Vaccine-"+sessions[j].vaccine+"</td>"+"</tr></table>"+
                                     "</p>";
@@ -143,6 +165,7 @@
                                     "<td>Avail-"+sessions[j].available_capacity_dose2+"</td>"+
                                     "<td>FeeType-"+centers[i].fee_type+"</td>"+
                                     "<td>District-"+centers[i].district_name+"</td>"+
+									"<td>PinCode-"+centers[i].pincode+"</td>"+
                                     "<td>AgeLimit-"+sessions[j].min_age_limit+"</td>"+
                                     "<td>Vaccine-"+sessions[j].vaccine+"</td>"+"</tr></table>"+
                                     "</p>";
@@ -210,6 +233,7 @@ function changeDistrict(value){
         
         <div>
             <p id="day"></p>
+			<p id="errorlbl"></p>
         </div>
 <br>
         <p id="date"></p>
