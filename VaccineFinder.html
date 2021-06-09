@@ -18,6 +18,12 @@
             tr:nth-child(even) {
               background-color: #dddddd;
             }
+	    .searchBtn{
+                padding-top: 30px;
+            }
+            .regLink {
+                padding-left: 60%;
+            }
 			
 			@media only screen and (min-width: 600px) {
             /* Three image containers (use 25% for four, and 50% for two, etc) */
@@ -33,6 +39,10 @@
             clear: both;
             display: table;
             }
+				
+	    .regLink {
+                padding-left: 70%;
+            }			
 			}
             </style>    
         <script>               
@@ -230,7 +240,8 @@ function changeDistrict(value){
             </div>
             </fieldset>
         </div>
-            <input type="button" onclick="searchSlot()" value="Search">
+            <div class="searchBtn" ><input type="button" onclick="searchSlot()" value="Search"></div>
+            <div class="regLink" ><b><a href="https://selfregistration.cowin.gov.in/" target="_blank">Register/Book Slot</a></b></div>
         </div>
         
         <div>
