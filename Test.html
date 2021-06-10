@@ -1,0 +1,33 @@
+<!doctype html>
+	<head>
+		<title>Show Notification using Javascript</title>
+	</head>
+	<body>
+		<h3>Show Notification using Javascript</h3>
+
+
+		<script>
+			/* JS comes here */
+			askForApproval();
+			
+            function askForApproval() {
+                if(Notification.permission === "granted") {
+                    createNotification('Wow! This is great', 'created by me', '');
+                }
+                else {
+                    Notification.requestPermission(permission => {
+                        if(permission === 'granted') {
+                            createNotification('Wow! This is great', 'created by me', '');
+                        }
+                    });
+                }
+            }
+            
+            function createNotification(title, text, icon) {
+                const noti = new Notification(title, {
+                    body: text
+                });
+            }
+		</script>
+	</body>
+</html>
