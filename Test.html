@@ -75,7 +75,8 @@
 			}
             </style>    
         <script>     
-        
+        navigator.serviceWorker.register('sw.js');
+
         document.addEventListener('DOMContentLoaded', function() {
 		 if (!Notification) {
 		  alert('Desktop notifications not available in your browser. Try Chromium.');
