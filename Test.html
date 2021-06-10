@@ -43,6 +43,15 @@
 				  font-size: 16px;
 				  
 			}
+			.searchBtn:active{
+				   background-color:red;
+				}
+			select {
+				width:100%
+			}
+			.column {
+	            padding: 5px;
+            }
 			
 			@media only screen and (min-width: 600px) {
             /* Three image containers (use 25% for four, and 50% for two, etc) */
@@ -74,7 +83,8 @@
 			}
 			}
             </style>    
-        <script>     
+        <script>      
+        
         navigator.serviceWorker.register('sw.js');
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -178,6 +188,8 @@
 				var ageGrp = "";
 				var dose ="";
 				var searchDate = "";
+				var feeTyp = "";
+				var vaccine = "";
 				if(document.getElementById("searchDt")){
 					searchDate = document.getElementById("searchDt").value;;
 				}
@@ -191,6 +203,12 @@
                 
                 if(document.querySelector('input[name="doseGrp"]:checked')){
 					dose = document.querySelector('input[name="doseGrp"]:checked').value; 
+				}                
+                if(document.getElementById("hidFeeTyp")){
+                	feeTyp = document.getElementById("hidFeeTyp").value;
+				}
+                if(document.getElementById("hidVaccine")){
+                	vaccine = document.getElementById("hidVaccine").value;
 				}
 				
 				if(district_id === "" || ageGrp === "" || dose === "" || searchDate === ""){
@@ -220,7 +238,13 @@
 					if (this.readyState == 4 && this.status == 200) {
 							// Typical action to be performed when the document is ready:
 							var response = this.responseText;
-							var msg = parseJson(response,currDate,ageGrp,dose);
+							var msg = "";
+							if(feeTyp == "ALL" && vaccine == "ALL"){
+								var msg = parseJsonAll(response,currDate,ageGrp,dose);
+							}else{
+								 msg = parseJson(response,currDate,ageGrp,dose,feeTyp,vaccine);
+							}
+							
 							if (msg != DEFAULT_MSG){
 								document.getElementById("day"+i).innerHTML = msg;
 								askForApproval();
@@ -241,18 +265,20 @@
 				})(i);
 				}
                
-            }     
-  
-        function parseJson(response,currDate,ageGrp,dose){
+            } 
+        
+        function parseJsonAll(response,currDate,ageGrp,dose){
             var obj = JSON.parse(response);
             var centers = obj.centers;
             var msg = "";
+            
             for(var i=0; i< centers.length; i++){
-                //if(centers[i].fee_type == 'Paid'){
+                //if(centers[i].fee_type == feeTyp){
                     var sessions = centers[i].sessions;
                     for( var j=0; j< sessions.length; j++){
                         if(dose === "D1"){
-                            if(sessions[j].date === currDate && sessions[j].min_age_limit == ageGrp && sessions[j].available_capacity_dose1 > 0){
+                            if(sessions[j].date === currDate && sessions[j].min_age_limit == ageGrp && sessions[j].available_capacity_dose1 > 0
+                            		 ){
                                 msg =msg+"<p>"+ "<b>Date-"+sessions[j].date+"</b><br>"+"<table><tr><td>Center- "+centers[i].name+"</td>"+
                                     "<td>Avail-"+sessions[j].available_capacity_dose1+"</td>"+
                                     "<td>FeeType-"+centers[i].fee_type+"</td>"+
@@ -264,7 +290,8 @@
                                 
                             }
                         }else{
-                            if(sessions[j].date === currDate && sessions[j].min_age_limit == ageGrp && sessions[j].available_capacity_dose2 > 0){
+                            if(sessions[j].date === currDate && sessions[j].min_age_limit == ageGrp && sessions[j].available_capacity_dose2 > 0
+                            		){
                                 msg =msg+"<p>"+ "<b>Date-"+sessions[j].date+"</b><br>"+"<table><tr><td>Center- "+centers[i].name+"</td>"+
                                     "<td>Avail-"+sessions[j].available_capacity_dose2+"</td>"+
                                     "<td>FeeType-"+centers[i].fee_type+"</td>"+
@@ -278,7 +305,128 @@
                         }
                     }
                     
-               // }
+                //}
+            }
+            
+            if(msg== ""){
+                return DEFAULT_MSG;
+            }else{
+                return msg;
+            }
+        }
+  
+        function parseJson(response,currDate,ageGrp,dose,feeTyp,vaccine){
+            var obj = JSON.parse(response);
+            var centers = obj.centers;
+            var msg = "";
+            if(feeTyp != "ALL" && vaccine != "ALL"){
+	            for(var i=0; i< centers.length; i++){
+	                if(centers[i].fee_type == feeTyp){
+	                    var sessions = centers[i].sessions;
+	                    for( var j=0; j< sessions.length; j++){
+	                        if(dose === "D1"){
+	                            if(sessions[j].date === currDate && sessions[j].min_age_limit == ageGrp && sessions[j].available_capacity_dose1 > 0
+	                            		 && sessions[j].vaccine == vaccine){
+	                                msg =msg+"<p>"+ "<b>Date-"+sessions[j].date+"</b><br>"+"<table><tr><td>Center- "+centers[i].name+"</td>"+
+	                                    "<td>Avail-"+sessions[j].available_capacity_dose1+"</td>"+
+	                                    "<td>FeeType-"+centers[i].fee_type+"</td>"+
+	                                    "<td>District-"+centers[i].district_name+"</td>"+
+										"<td>PinCode-"+centers[i].pincode+"</td>"+
+	                                    "<td>AgeLimit-"+sessions[j].min_age_limit+"</td>"+
+	                                    "<td>Vaccine-"+sessions[j].vaccine+"</td>"+"</tr></table>"+
+	                                    "</p>";
+	                                
+	                            }
+	                        }else{
+	                            if(sessions[j].date === currDate && sessions[j].min_age_limit == ageGrp && sessions[j].available_capacity_dose2 > 0
+	                            		&& sessions[j].vaccine == vaccine){
+	                                msg =msg+"<p>"+ "<b>Date-"+sessions[j].date+"</b><br>"+"<table><tr><td>Center- "+centers[i].name+"</td>"+
+	                                    "<td>Avail-"+sessions[j].available_capacity_dose2+"</td>"+
+	                                    "<td>FeeType-"+centers[i].fee_type+"</td>"+
+	                                    "<td>District-"+centers[i].district_name+"</td>"+
+										"<td>PinCode-"+centers[i].pincode+"</td>"+
+	                                    "<td>AgeLimit-"+sessions[j].min_age_limit+"</td>"+
+	                                    "<td>Vaccine-"+sessions[j].vaccine+"</td>"+"</tr></table>"+
+	                                    "</p>";
+	                                
+	                            }
+	                        }
+	                    }
+	                    
+	                }
+	            }
+            }else if (feeTyp === "ALL" && vaccine != "ALL"){
+            	for(var i=0; i< centers.length; i++){
+	                //if(centers[i].fee_type == 'Paid'){
+	                    var sessions = centers[i].sessions;
+	                    for( var j=0; j< sessions.length; j++){
+	                        if(dose === "D1"){
+	                            if(sessions[j].date === currDate && sessions[j].min_age_limit == ageGrp && sessions[j].available_capacity_dose1 > 0
+	                            		&& sessions[j].vaccine == vaccine){
+	                                msg =msg+"<p>"+ "<b>Date-"+sessions[j].date+"</b><br>"+"<table><tr><td>Center- "+centers[i].name+"</td>"+
+	                                    "<td>Avail-"+sessions[j].available_capacity_dose1+"</td>"+
+	                                    "<td>FeeType-"+centers[i].fee_type+"</td>"+
+	                                    "<td>District-"+centers[i].district_name+"</td>"+
+										"<td>PinCode-"+centers[i].pincode+"</td>"+
+	                                    "<td>AgeLimit-"+sessions[j].min_age_limit+"</td>"+
+	                                    "<td>Vaccine-"+sessions[j].vaccine+"</td>"+"</tr></table>"+
+	                                    "</p>";
+	                                
+	                            }
+	                        }else{
+	                            if(sessions[j].date === currDate && sessions[j].min_age_limit == ageGrp && sessions[j].available_capacity_dose2 > 0
+	                            		&& sessions[j].vaccine == vaccine){
+	                                msg =msg+"<p>"+ "<b>Date-"+sessions[j].date+"</b><br>"+"<table><tr><td>Center- "+centers[i].name+"</td>"+
+	                                    "<td>Avail-"+sessions[j].available_capacity_dose2+"</td>"+
+	                                    "<td>FeeType-"+centers[i].fee_type+"</td>"+
+	                                    "<td>District-"+centers[i].district_name+"</td>"+
+										"<td>PinCode-"+centers[i].pincode+"</td>"+
+	                                    "<td>AgeLimit-"+sessions[j].min_age_limit+"</td>"+
+	                                    "<td>Vaccine-"+sessions[j].vaccine+"</td>"+"</tr></table>"+
+	                                    "</p>";
+	                                
+	                            }
+	                        }
+	                    }
+	                    
+	                //}
+	            }
+            }else if (feeTyp != "ALL" && vaccine === "ALL"){
+            	for(var i=0; i< centers.length; i++){
+	                if(centers[i].fee_type == feeTyp){
+	                    var sessions = centers[i].sessions;
+	                    for( var j=0; j< sessions.length; j++){
+	                        if(dose === "D1"){
+	                            if(sessions[j].date === currDate && sessions[j].min_age_limit == ageGrp && sessions[j].available_capacity_dose1 > 0
+	                            		){
+	                                msg =msg+"<p>"+ "<b>Date-"+sessions[j].date+"</b><br>"+"<table><tr><td>Center- "+centers[i].name+"</td>"+
+	                                    "<td>Avail-"+sessions[j].available_capacity_dose1+"</td>"+
+	                                    "<td>FeeType-"+centers[i].fee_type+"</td>"+
+	                                    "<td>District-"+centers[i].district_name+"</td>"+
+										"<td>PinCode-"+centers[i].pincode+"</td>"+
+	                                    "<td>AgeLimit-"+sessions[j].min_age_limit+"</td>"+
+	                                    "<td>Vaccine-"+sessions[j].vaccine+"</td>"+"</tr></table>"+
+	                                    "</p>";
+	                                
+	                            }
+	                        }else{
+	                            if(sessions[j].date === currDate && sessions[j].min_age_limit == ageGrp && sessions[j].available_capacity_dose2 > 0
+	                            		){
+	                                msg =msg+"<p>"+ "<b>Date-"+sessions[j].date+"</b><br>"+"<table><tr><td>Center- "+centers[i].name+"</td>"+
+	                                    "<td>Avail-"+sessions[j].available_capacity_dose2+"</td>"+
+	                                    "<td>FeeType-"+centers[i].fee_type+"</td>"+
+	                                    "<td>District-"+centers[i].district_name+"</td>"+
+										"<td>PinCode-"+centers[i].pincode+"</td>"+
+	                                    "<td>AgeLimit-"+sessions[j].min_age_limit+"</td>"+
+	                                    "<td>Vaccine-"+sessions[j].vaccine+"</td>"+"</tr></table>"+
+	                                    "</p>";
+	                                
+	                            }
+	                        }
+	                    }
+	                    
+	                }
+	            }
             }
             if(msg== ""){
                 return DEFAULT_MSG;
@@ -286,10 +434,14 @@
                 return msg;
             }
         }
-function changeDistrict(value){
-    
-    document.getElementById("hidDistrct").value=value;
-    
+function changeDistrict(value){    
+    document.getElementById("hidDistrct").value=value;    
+}
+function changeVaccine(value){    
+    document.getElementById("hidVaccine").value=value;    
+}
+function changeFeeType(value){    
+    document.getElementById("hidFeeTyp").value=value;    
 }
         </script>
     </head>
@@ -298,14 +450,34 @@ function changeDistrict(value){
         <div class="row">
             <div id="selectDrpDiv" class="column">
                 <label>Select State:</label>
-                <select name="state" id="statedrp" onChange="populateDistrict(this.value);">                    
+                <select name="state" id="statedrp" onChange="populateDistrict(this.value);">      
+                <option value="" disabled selected>Select</option>              
                 </select>
             </div>
             <div id="selectDrpDiv" class="column">
                 <label>Select District:</label>
-                <select name="district" id="districtdrp" onChange="changeDistrict(this.value);">                    
+                <select name="district" id="districtdrp" onChange="changeDistrict(this.value);">   
+                <option value="" disabled selected>Select</option>                 
                 </select>
             </div>
+            <div id="selectDrpDiv" class="column">
+                <label>Select Vaccine:</label>
+                <select name="vaccineSel" id="vaccineSel" onChange="changeVaccine(this.value);">  
+                <option value="ALL" selected>ALL</option>
+                <option value="COVISHIELD">COVISHIELD</option>               
+                <option value="COVAXIN">COVAXIN</option>
+                </select>
+            </div>
+            <div id="selectDrpDiv" class="column">
+                <label>Select Fee Type:</label>
+                <select name="feeTypSel" id="feeTypSel" onChange="changeFeeType(this.value);">  
+                <option value="ALL" selected>ALL</option>
+                <option value="Paid">Paid</option>               
+                <option value="Free">Free</option>
+                </select>
+            </div>
+            </div>
+            <div class="row">
             <div class="column">
             <fieldset>
                 <legend>Age Group</legend>
@@ -335,11 +507,13 @@ function changeDistrict(value){
 				 <input type="date" id="searchDt" name="searchDt"> 
 			</div>
             <div class="searchBtnDiv" ><input type="button" class="searchBtn" onclick="searchSlot()" value="Search"></div>
-            <div class="regLink" ><b><a href="https://selfregistration.cowin.gov.in/" target="_blank">Register/Book Slot</a></b></div>
+            
         </div>
         
         <div>
             <input type="hidden" id="hidDistrct" value=""/>
+            <input type="hidden" id="hidVaccine" value="ALL"/>
+            <input type="hidden" id="hidFeeTyp" value="ALL"/>
         </div>
         
         <div>
@@ -355,15 +529,13 @@ function changeDistrict(value){
         </div>
 <br>
         <p id="date"></p>
-        <div class="container text-center footer-wrapper">
         <div class="footer">
             <div class="row">
                 <div class="col-md-12">
-                    <strong>Disclaimer:</strong> This web app uses CoWin open API to find slots. <br/>
-                   
+                    <strong>Disclaimer:</strong> This web app uses CoWin open API to find slots. Please click here to
+                   <b><a href="https://selfregistration.cowin.gov.in/" target="_blank">Register/Book Slot</a></b><br/>
                 </div>
             </div>
         </div>
-    </div>
     </body>
 </html>
