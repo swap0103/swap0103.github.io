@@ -1,5 +1,8 @@
+<!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="ISO-8859-1">
+	<title>Vaccine Finder</title>
     <head>    
         <style>
             table {
@@ -19,7 +22,7 @@
               background-color: #dddddd;
             }
 
-            .searchBtn{
+            .searchBtnDiv{
                 padding-top: 30px;
             }
             .regLink {
@@ -27,6 +30,18 @@
             }
 			#dateDiv{
 				padding-top: 2%;
+			}
+			.searchBtn{
+				  width: 50%;
+				  background-color: #4CAF50; /* Green */
+				  border: none;
+				  color: white;
+				  padding: 15px 32px;
+				  text-align: center;
+				  text-decoration: none;
+				  display: inline-block;
+				  font-size: 16px;
+				  
 			}
 			
 			@media only screen and (min-width: 600px) {
@@ -46,10 +61,51 @@
             .regLink {
                 padding-left: 90%;
             }
-			
+			.searchBtn{
+				  width: 10%;
+				  background-color: #4CAF50; /* Green */
+				  border: none;
+				  color: white;
+				  padding: 10px 30px;
+				  text-align: center;
+				  text-decoration: none;
+				  display: inline-block;
+				  font-size: 16px;
+			}
 			}
             </style>    
-        <script>               
+        <script>     
+        navigator.serviceWorker.register('sw.js');
+
+        document.addEventListener('DOMContentLoaded', function() {
+		 if (!Notification) {
+		  alert('Desktop notifications not available in your browser. Try Chromium.');
+		  return;
+		 }
+
+		 if (Notification.permission !== 'granted')
+		  Notification.requestPermission();
+		});
+		
+        function askForApproval() {
+            if(Notification.permission === "granted") {
+                createNotification('Vaccine Alert', 'Your search based vaccine slot is available now', '');
+            }
+            else {
+                Notification.requestPermission(permission => {
+                    if(permission === 'granted') {
+                        createNotification('Vaccine Alert', 'Your search based vaccine slot is available now', '');
+                    }
+                });
+            }
+        }
+        
+        function createNotification(title, text, icon) {
+            const noti = new Notification(title, {
+                body: text,
+                icon
+            });
+        }
         var DEFAULT_MSG = "No Slots Free"; 		
         setInterval(searchSlot, 60000); //Search interval in milliseconds
         populateState();
@@ -116,7 +172,8 @@
         }
         
 
-        function searchSlot(){         
+        function searchSlot(){     
+        	document.getElementById("errorlbl").style="display:none;"
 				var district_id ="";
 				var ageGrp = "";
 				var dose ="";
@@ -132,15 +189,17 @@
 					ageGrp = document.querySelector('input[name="ageGrp"]:checked').value;  
 				}
                 
-                		if(document.querySelector('input[name="doseGrp"]:checked')){
+                if(document.querySelector('input[name="doseGrp"]:checked')){
 					dose = document.querySelector('input[name="doseGrp"]:checked').value; 
 				}
 				
 				if(district_id === "" || ageGrp === "" || dose === "" || searchDate === ""){
+					document.getElementById("errorlbl").style="display:block;"
+					document.getElementById("errorlbl").innerHTML = "<b style=\"color: red;\">Please select required fields to search<b>";
 					return;
 				}
 				var alertCount = 0;
-                		var xhttp = [];
+                var xhttp = [];
 				
 				
 				for (var i=0; i<7; i++) {
@@ -150,9 +209,9 @@
 					nextDay.setDate(day.getDate() + i);					
 					var dd = nextDay.getDate();
 					dd = ("0" + dd).slice(-2);
-                    			var mm = nextDay.getMonth()+1; 
+                    var mm = nextDay.getMonth()+1; 
 					mm = ("0" + mm).slice(-2);
-                    			var yyyy = nextDay.getFullYear();
+                    var yyyy = nextDay.getFullYear();
 
 					var currDate = dd+'-'+mm+'-'+yyyy;                
 
@@ -164,14 +223,12 @@
 							var msg = parseJson(response,currDate,ageGrp,dose);
 							if (msg != DEFAULT_MSG){
 								document.getElementById("day"+i).innerHTML = msg;
-								if(alertCount <1){
-									alertCount++;
-									alert("Slot Available now");									
-								}								
+								askForApproval();
+																
 							}else{
 								document.getElementById("day"+i).innerHTML = "<b>"+currDate+"</b> - "+msg;
 							}
-							document.getElementById("date").innerHTML = "Date:"+today;
+							document.getElementById("date").innerHTML = "Date:"+new Date();
 						   
 						}else if(this.readyState == 4 && this.status != 200){
 						document.getElementById("errorlbl").innerHTML = "<b style=\"color: red;\">Service Not Available<b>";
@@ -237,7 +294,7 @@ function changeDistrict(value){
         </script>
     </head>
     <body>
-        <h1>Vaccine Availability</h1>
+        <h1>Vaccine Slot Availability</h1>
         <div class="row">
             <div id="selectDrpDiv" class="column">
                 <label>Select State:</label>
@@ -277,7 +334,7 @@ function changeDistrict(value){
 				 <label for="searchDt">Date:</label>
 				 <input type="date" id="searchDt" name="searchDt"> 
 			</div>
-            <div class="searchBtn" ><input type="button" onclick="searchSlot()" value="Search"></div>
+            <div class="searchBtnDiv" ><input type="button" class="searchBtn" onclick="searchSlot()" value="Search"></div>
             <div class="regLink" ><b><a href="https://selfregistration.cowin.gov.in/" target="_blank">Register/Book Slot</a></b></div>
         </div>
         
@@ -298,5 +355,15 @@ function changeDistrict(value){
         </div>
 <br>
         <p id="date"></p>
+        <div class="container text-center footer-wrapper">
+        <div class="footer">
+            <div class="row">
+                <div class="col-md-12">
+                    <strong>Disclaimer:</strong> This web app uses CoWin open API to find slots. <br/>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
     </body>
 </html>
