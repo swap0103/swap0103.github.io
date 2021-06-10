@@ -247,7 +247,10 @@
 							
 							if (msg != DEFAULT_MSG){
 								document.getElementById("day"+i).innerHTML = msg;
-								askForApproval();
+								if(alertCount <0){
+									askForApproval();
+									alertCount++;
+								}
 																
 							}else{
 								document.getElementById("day"+i).innerHTML = "<b>"+currDate+"</b> - "+msg;
