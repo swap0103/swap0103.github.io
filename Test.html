@@ -92,7 +92,7 @@
 		  alert('Desktop notifications not available in your browser. Try Chromium.');
 		  return;
 		 }
-
+		navigator.serviceWorker.register('sw.js');
 		 if (Notification.permission !== 'granted')
 		  Notification.requestPermission();
 		});
