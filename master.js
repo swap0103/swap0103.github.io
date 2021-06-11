@@ -135,14 +135,15 @@
 				
 				for (var i=0; i<7; i++) {
 				  (function(i){ 	
+					 document.getElementById("loader").style.display = "block";
 					var day = new Date(searchDate);
 					var nextDay = new Date(searchDate);
 					nextDay.setDate(day.getDate() + i);					
 					var dd = nextDay.getDate();
 					dd = ("0" + dd).slice(-2);
-                    var mm = nextDay.getMonth()+1; 
+                    			var mm = nextDay.getMonth()+1; 
 					mm = ("0" + mm).slice(-2);
-                    var yyyy = nextDay.getFullYear();
+                    			var yyyy = nextDay.getFullYear();
 
 					var currDate = dd+'-'+mm+'-'+yyyy;                
 
@@ -150,6 +151,7 @@
 					xhttp[i].onreadystatechange = function() {
 					if (this.readyState == 4 && this.status == 200) {
 							// Typical action to be performed when the document is ready:
+							document.getElementById("loader").style.display = "none";
 							var response = this.responseText;
 							var msg = "";
 							if(feeTyp == "ALL" && vaccine == "ALL"){
