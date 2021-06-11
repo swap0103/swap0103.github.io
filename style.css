@@ -1,0 +1,77 @@
+table {
+              font-family: arial, sans-serif;
+              border-collapse: collapse;
+              width: 100%;
+            }
+            
+            td, th {
+              border: 1px solid #dddddd;
+              text-align: left;
+              padding: 8px;
+	      font-size: small;
+            }
+            
+            tr:nth-child(even) {
+              background-color: #dddddd;
+            }
+
+            .searchBtnDiv{
+                padding-top: 30px;
+            }
+            .regLink {
+                padding-left: 60%;
+            }
+			#dateDiv{
+				padding-top: 2%;
+			}
+			.searchBtn{
+				  width: 50%;
+				  background-color: #4CAF50; /* Green */
+				  border: none;
+				  color: white;
+				  padding: 15px 32px;
+				  text-align: center;
+				  text-decoration: none;
+				  display: inline-block;
+				  font-size: 16px;
+				  
+			}
+			.searchBtn:active{
+				   background-color:red;
+				}
+			select {
+				width:100%
+			}
+			.column {
+	            padding: 5px;
+            }
+			
+			@media only screen and (min-width: 600px) {
+            /* Three image containers (use 25% for four, and 50% for two, etc) */
+            .column {
+            float: left;
+            width: 15%;
+            padding: 5px;
+            }
+
+            /* Clear floats after image containers */
+            .row::after {
+            content: "";
+            clear: both;
+            display: table;
+            }
+            .regLink {
+                padding-left: 90%;
+            }
+			.searchBtn{
+				  width: 10%;
+				  background-color: #4CAF50; /* Green */
+				  border: none;
+				  color: white;
+				  padding: 10px 30px;
+				  text-align: center;
+				  text-decoration: none;
+				  display: inline-block;
+				  font-size: 16px;
+			}
+			}
