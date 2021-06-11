@@ -92,12 +92,21 @@
 		  alert('Desktop notifications not available in your browser. Try Chromium.');
 		  return;
 		 }
+		
 		navigator.serviceWorker.register('sw.js');
+
 		 if (Notification.permission !== 'granted')
 		  Notification.requestPermission();
 		});
 		
         function askForApproval() {
+		Notification.requestPermission(function(result) {
+		  if (result === 'granted') {
+		    navigator.serviceWorker.ready.then(function(registration) {
+		      registration.showNotification('Vaccine Alert');
+		    });
+		  }
+		});
             if(Notification.permission === "granted") {
                 createNotification('Vaccine Alert', 'Your search based vaccine slot is available now', '');
             }
