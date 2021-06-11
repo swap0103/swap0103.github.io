@@ -19,7 +19,8 @@
 		      registration.showNotification('Vaccine Alert',{
 			  body: 'Slot Available Now!',
 			  vibrate: [200, 100, 200, 100, 200, 100, 200],
-			  tag: 'vibration-sample'
+			  tag: 'vibration-sample',
+			  requireInteraction: true
 			});
 			    
 		    });
