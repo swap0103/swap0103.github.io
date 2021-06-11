@@ -103,28 +103,18 @@
 		Notification.requestPermission(function(result) {
 		  if (result === 'granted') {
 		    navigator.serviceWorker.ready.then(function(registration) {
-		      registration.showNotification('Vaccine Alert');
+		      registration.showNotification('Vaccine Alert',{
+			  body: 'Slot Available Now!',
+			  vibrate: [200, 100, 200, 100, 200, 100, 200],
+			  tag: 'vibration-sample'
+			});
+			    
 		    });
 		  }
 		});
-            if(Notification.permission === "granted") {
-                createNotification('Vaccine Alert', 'Your search based vaccine slot is available now', '');
-            }
-            else {
-                Notification.requestPermission(permission => {
-                    if(permission === 'granted') {
-                        createNotification('Vaccine Alert', 'Your search based vaccine slot is available now', '');
-                    }
-                });
-            }
+           
         }
         
-        function createNotification(title, text, icon) {
-            const noti = new Notification(title, {
-                body: text,
-                icon
-            });
-        }
         var DEFAULT_MSG = "No Slots Free"; 		
         setInterval(searchSlot, 60000); //Search interval in milliseconds
         populateState();
