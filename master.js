@@ -14,10 +14,11 @@
 		
         function askForApproval() {
 		Notification.requestPermission(function(result) {
+		var district = document.getElementById("hidDistrctName").value;
 		  if (result === 'granted') {
 		    navigator.serviceWorker.ready.then(function(registration) {
 		      registration.showNotification('Vaccine Alert',{
-			  body: 'Slot Available Now!',
+			  body: 'Slot Available Now in'+district+'!',
 			  vibrate: [200, 100, 200, 100, 200, 100, 200],
 			  tag: 'vibration-sample',
 			  requireInteraction: true
@@ -147,7 +148,7 @@
 					return;
 				}
 				var alertCount = 0;
-                var xhttp = [];
+                		var xhttp = [];
 				
 				
 				for (var i=0; i<7; i++) {
@@ -206,12 +207,14 @@
             var obj = JSON.parse(response);
             var centers = obj.centers;
             var count = 0;
+	    var district = "";
             var msg = "<p><b>"+currDate+"</b></p>"+
             			"<table><tr><th>Center</th><th>Avail</th><th>Fee-Type</th><th>District</th>"
             			+"<th>PinCode</th><th>Age-Limit</th><th>Vaccine</th></tr>";
             
             for(var i=0; i< centers.length; i++){
                 //if(centers[i].fee_type == feeTyp){
+		    district = centers[i].district_name;
                     var sessions = centers[i].sessions;
                     for( var j=0; j< sessions.length; j++){
                         if(dose === "D1"){
@@ -258,12 +261,14 @@
             var obj = JSON.parse(response);
             var centers = obj.centers;
             var count = 0;
+	    var district = "";
             var msg = "<p><b>"+currDate+"</b></p>"+
 			"<table><tr><th>Center</th><th>Avail</th><th>Fee-Type</th><th>District</th>"
 			+"<th>PinCode</th><th>Age-Limit</th><th>Vaccine</th></tr>";
             if(feeTyp != "ALL" && vaccine != "ALL"){
 	            for(var i=0; i< centers.length; i++){
 	                if(centers[i].fee_type == feeTyp){
+			   district = centers[i].district_name;
 	                    var sessions = centers[i].sessions;
 	                    for( var j=0; j< sessions.length; j++){
 	                        if(dose === "D1"){
@@ -300,6 +305,7 @@
             }else if (feeTyp === "ALL" && vaccine != "ALL"){
             	for(var i=0; i< centers.length; i++){
 	                //if(centers[i].fee_type == 'Paid'){
+			   district = centers[i].district_name;
 	                    var sessions = centers[i].sessions;
 	                    for( var j=0; j< sessions.length; j++){
 	                        if(dose === "D1"){
@@ -336,6 +342,7 @@
             }else if (feeTyp != "ALL" && vaccine === "ALL"){
             	for(var i=0; i< centers.length; i++){
 	                if(centers[i].fee_type == feeTyp){
+		            district = centers[i].district_name;
 	                    var sessions = centers[i].sessions;
 	                    for( var j=0; j< sessions.length; j++){
 	                        if(dose === "D1"){
@@ -374,6 +381,7 @@
                 return DEFAULT_MSG;
             }else{
             	msg = msg+"</table>"
+		document.getElementById("hidDistrctName").value=district;
                 return msg;
             }
         }
