@@ -209,7 +209,7 @@
             var count = 0;
 	    var district = "";
             var msg = "<p><b>"+currDate+"</b></p>"+
-            			"<table><tr><th>Center</th><th>Avail</th><th>Fee-Type</th><th>District</th>"
+            			"<table><tr><th class=\"centerCol\">Center</th><th>Avail</th><th>Fee-Type</th><th>District</th>"
             			+"<th>PinCode</th><th>Age-Limit</th><th>Vaccine</th></tr>";
             
             for(var i=0; i< centers.length; i++){
@@ -264,7 +264,7 @@
             var count = 0;
 	    var district = "";
             var msg = "<p><b>"+currDate+"</b></p>"+
-			"<table><tr><th>Center</th><th>Avail</th><th>Fee-Type</th><th>District</th>"
+			"<table><tr><th class=\"centerCol\">Center</th><th>Avail</th><th>Fee-Type</th><th>District</th>"
 			+"<th>PinCode</th><th>Age-Limit</th><th>Vaccine</th></tr>";
             if(feeTyp != "ALL" && vaccine != "ALL"){
 	            for(var i=0; i< centers.length; i++){
