@@ -18,7 +18,7 @@
 		  if (result === 'granted') {
 		    navigator.serviceWorker.ready.then(function(registration) {
 		      registration.showNotification('Vaccine Alert',{
-			  body: 'Slot Available Now in'+district+'!',
+			  body: 'Slot Available Now in '+district+'!',
 			  vibrate: [200, 100, 200, 100, 200, 100, 200],
 			  tag: 'vibration-sample',
 			  requireInteraction: true
@@ -253,6 +253,7 @@
                 return DEFAULT_MSG;
             }else{
             	msg = msg+"</table>"
+		document.getElementById("hidDistrctName").value=district;
                 return msg;
             }
         }
