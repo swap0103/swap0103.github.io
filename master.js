@@ -108,20 +108,25 @@
 				}
 				if(document.getElementById("hidDistrct")){
 					district_id = document.getElementById("hidDistrct").value;
+					setCookie("district_id",district_id);
 				}
 					
 				if(document.querySelector('input[name="ageGrp"]:checked')){
 					ageGrp = document.querySelector('input[name="ageGrp"]:checked').value;  
+					setCookie("ageGrp",ageGrp);
 				}
                 
-                if(document.querySelector('input[name="doseGrp"]:checked')){
+				if(document.querySelector('input[name="doseGrp"]:checked')){
 					dose = document.querySelector('input[name="doseGrp"]:checked').value; 
+					setCookie("dose",dose);
 				}                
-                if(document.getElementById("hidFeeTyp")){
-                	feeTyp = document.getElementById("hidFeeTyp").value;
+				if(document.getElementById("hidFeeTyp")){
+					feeTyp = document.getElementById("hidFeeTyp").value;
+					setCookie("feeTyp",feeTyp);
 				}
-                if(document.getElementById("hidVaccine")){
-                	vaccine = document.getElementById("hidVaccine").value;
+				if(document.getElementById("hidVaccine")){
+					vaccine = document.getElementById("hidVaccine").value;
+					setCookie("vaccine",vaccine);
 				}
 				
 				if(district_id === "" || ageGrp === "" || dose === "" || searchDate === ""){
@@ -368,4 +373,25 @@ function changeVaccine(value){
 }
 function changeFeeType(value){    
     document.getElementById("hidFeeTyp").value=value;    
+}
+function setCookie(cname,cvalue) {
+  var d = new Date();
+  d.setTime(d.getTime() + (30*24*60*60*1000));
+  var expires = "expires=" + d.toGMTString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
 }
