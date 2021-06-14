@@ -15,12 +15,14 @@
         function askForApproval() {
 		Notification.requestPermission(function(result) {
 		var district = document.getElementById("hidDistrctName").value;
+		var img = '/Shot_0.png';
 		  if (result === 'granted') {
 		    navigator.serviceWorker.ready.then(function(registration) {
 		      registration.showNotification('Vaccine Alert',{
 			  body: 'Slot Available Now in '+district+'!',
 			  vibrate: [200, 100, 200, 100, 200, 100, 200],
 			  tag: 'vibration-sample',
+			  icon: img,
 			  requireInteraction: true
 			});
 			    
