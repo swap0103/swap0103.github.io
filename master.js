@@ -109,24 +109,36 @@
 				if(document.getElementById("hidDistrct")){
 					district_id = document.getElementById("hidDistrct").value;
 					setCookie("district_id",district_id);
+				}else if(getCookie("district_id")!= ""){
+					district_id = getCookie("district_id");
 				}
 					
 				if(document.querySelector('input[name="ageGrp"]:checked')){
 					ageGrp = document.querySelector('input[name="ageGrp"]:checked').value;  
 					setCookie("ageGrp",ageGrp);
+				}else if(getCookie("ageGrp")!= ""){
+					ageGrp = getCookie("ageGrp");
 				}
                 
 				if(document.querySelector('input[name="doseGrp"]:checked')){
 					dose = document.querySelector('input[name="doseGrp"]:checked').value; 
 					setCookie("dose",dose);
-				}                
+				}else if(getCookie("dose")!= ""){
+					dose = getCookie("dose");
+				}
+		
 				if(document.getElementById("hidFeeTyp")){
 					feeTyp = document.getElementById("hidFeeTyp").value;
 					setCookie("feeTyp",feeTyp);
-				}
+				}else if(getCookie("feeTyp")!= ""){
+					feeTyp = getCookie("feeTyp");
+				} 
+		
 				if(document.getElementById("hidVaccine")){
 					vaccine = document.getElementById("hidVaccine").value;
 					setCookie("vaccine",vaccine);
+				}else if(getCookie("vaccine")!= ""){
+					vaccine = getCookie("vaccine");
 				}
 				
 				if(district_id === "" || ageGrp === "" || dose === "" || searchDate === ""){
