@@ -6,7 +6,7 @@ self.addEventListener('install', (event) => {
         './VaccineFinder.html',
         './Test.html',
         './style.css',
-        './master.jss',
+        './master.js',
         './main.js'
       ]);
     })
