@@ -10,7 +10,7 @@
 		  Notification.requestPermission();
 		});
 		
-        function askForApprovalTest() {
+        function askForApproval() {
 		Notification.requestPermission(function(result) {
 		var district = document.getElementById("hidDistrctName").value;
 		var img = '/Shot_0.png';
@@ -38,7 +38,7 @@ function checkNotificationPromise() {
 
     return true;
   }
-function askForApproval() {
+function askForApprovalTest() {
   // function to actually ask the permissions
   function handlePermission(permission) {
     // set the button to shown or hidden, depending on what the user answers
