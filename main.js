@@ -1,18 +1,16 @@
-navigator.serviceWorker.register('sw1.js');
-
         document.addEventListener('DOMContentLoaded', function() {
 		 if (!Notification) {
-		  alert('Desktop notifications not available in your browser. Try Chromium.');
+		  console.log('Desktop notifications not available in your browser. Try Chromium.');
 		  return;
 		 }
 		
-		navigator.serviceWorker.register('sw1.js');
+		navigator.serviceWorker.register('sw.js');
 
 		 if (Notification.permission !== 'granted')
 		  Notification.requestPermission();
 		});
 		
-        function askForApproval() {
+        function askForApprovalTest() {
 		Notification.requestPermission(function(result) {
 		var district = document.getElementById("hidDistrctName").value;
 		var img = '/Shot_0.png';
@@ -25,10 +23,43 @@ navigator.serviceWorker.register('sw1.js');
 			});
 			    
 		    });
+		  }else{
+			  console.log("Permission denied");
 		  }
 		});
            
         }
+function askForApproval() {
+  // function to actually ask the permissions
+  function handlePermission(permission) {
+    // set the button to shown or hidden, depending on what the user answers
+    if(Notification.permission === 'granted' )
+	var n = new Notification('Slot Available');
+	document.addEventListener('visibilitychange', function() {
+	  if (document.visibilityState === 'visible') {
+	    // The tab has become visible so clear the now-stale Notification.
+	    n.close();
+	  }
+	});
+    }
+  }
+
+  // Let's check if the browser supports notifications
+  if (!('Notification' in window)) {
+    console.log("This browser does not support notifications.");
+  } else {
+    if(checkNotificationPromise()) {
+      Notification.requestPermission()
+      .then((permission) => {
+        handlePermission(permission);
+      })
+    } else {
+      Notification.requestPermission(function(permission) {
+        handlePermission(permission);
+      });
+    }
+  }
+}
         
         var DEFAULT_MSG = "No Slots Free"; 		
         setInterval(searchSlot, 60000); //Search interval in milliseconds
