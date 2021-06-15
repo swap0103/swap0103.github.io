@@ -33,7 +33,7 @@ function askForApproval() {
   // function to actually ask the permissions
   function handlePermission(permission) {
     // set the button to shown or hidden, depending on what the user answers
-    if(Notification.permission === 'granted' )
+    if(Notification.permission === 'granted' ){
 	var n = new Notification('Slot Available');
 	document.addEventListener('visibilitychange', function() {
 	  if (document.visibilityState === 'visible') {
