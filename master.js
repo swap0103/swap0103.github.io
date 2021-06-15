@@ -21,7 +21,6 @@
 		      registration.showNotification('Vaccine Alert',{
 			  body: 'Slot Available Now in '+district+'!',
 			  vibrate: [200, 100, 200, 100, 200, 100, 200],
-			  tag: 'vibration-sample',
 			  icon: img,
 			  requireInteraction: true
 			});
