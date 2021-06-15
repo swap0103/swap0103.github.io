@@ -29,6 +29,15 @@
 		});
            
         }
+function checkNotificationPromise() {
+    try {
+      Notification.requestPermission().then();
+    } catch(e) {
+      return false;
+    }
+
+    return true;
+  }
 function askForApproval() {
   // function to actually ask the permissions
   function handlePermission(permission) {
