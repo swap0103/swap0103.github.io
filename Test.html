@@ -6,8 +6,8 @@
     <meta name="keywords" content="VaccineFinder, Covid19, Vaccine, vaccine Slot, Free slot, Vaccine Finder">
 	<title>Vaccine Finder</title>
     <head>    
-       <link rel="stylesheet" href="style.css"> 
-       <script src="main.js"></script>
+       <link rel="stylesheet" href="./style.css"> 
+       <script src="./main.js"></script>
     </head>
     <body>
         <h2>Vaccine Slot Finder</h2>
@@ -25,48 +25,55 @@
                 <option value="" disabled selected>Select</option>                 
                 </select>
             </div>
-            <div id="selectDrpDiv" class="column">
-                <label>Select Vaccine:</label>
-                <select name="vaccineSel" id="vaccineSel" onChange="changeVaccine(this.value);">  
-                <option value="ALL" selected>ALL</option>
-                <option value="COVISHIELD">COVISHIELD</option>               
-                <option value="COVAXIN">COVAXIN</option>
-                </select>
-            </div>
-            <div id="selectDrpDiv" class="column">
-                <label>Select Fee Type:</label>
-                <select name="feeTypSel" id="feeTypSel" onChange="changeFeeType(this.value);">  
-                <option value="ALL" selected>ALL</option>
-                <option value="Paid">Paid</option>               
-                <option value="Free">Free</option>
-                </select>
-            </div>
-            </div>
-            <div class="row">
-            <div class="column">
-            <fieldset>
-                <legend>Age Group</legend>
-            <div id="ageGrpDiv">
-                <input type="radio" id="18" name="ageGrp" value="18">
-                <label for="18">18+</label>
-                <input type="radio" id="40" name="ageGrp" value="40">
-                <label for="40">40+</label>
-                <input type="radio" id="45" name="ageGrp" value="45">
-                <label for="45">45+</label>
-            </div>
-           </fieldset>
-            </div>
             <div class="column">
                 <fieldset>
-                <legend>Dose</legend>
-                <div id="doseGrpDiv" >
-                    <input type="radio" id="D1" name="doseGrp" value="D1">
-                    <label for="D1">Dose1</label>
-                    <input type="radio" id="D2" name="doseGrp" value="D2">
-                    <label for="D2">Dose2</label>
+                    <legend>Age Group</legend>
+                <div id="ageGrpDiv">
+                    <input type="radio" id="18" name="ageGrp" value="18">
+                    <label for="18">18+</label>
+                    <input type="radio" id="40" name="ageGrp" value="40">
+                    <label for="40">40+</label>
+                    <input type="radio" id="45" name="ageGrp" value="45">
+                    <label for="45">45+</label>
                 </div>
-                </fieldset>
+               </fieldset>
+                </div>
+                <div class="column">
+                    <fieldset>
+                    <legend>Dose</legend>
+                    <div id="doseGrpDiv" >
+                        <input type="radio" id="D1" name="doseGrp" value="D1">
+                        <label for="D1">Dose1</label>
+                        <input type="radio" id="D2" name="doseGrp" value="D2">
+                        <label for="D2">Dose2</label>
+                    </div>
+                    </fieldset>
+                </div>
+            
+        </div>
+        <div class="row">
+            <div class="column" id="vaccDiv">
+                <fieldset>
+                    <legend>Vaccine</legend>
+                <div id="vaccDivGrp">
+                    <input type="radio" id="coviChk" name="vaccGrp" value="COVISHIELD">
+                    <label for="coviChk">Covishield</label>
+                    <input type="radio" id="covaxChk" name="vaccGrp" value="COVAXIN">
+                    <label for="covaxChk">Covaxin</label>
+                    <input type="radio" id="allChk" name="vaccGrp" checked value="ALL">
+                    <label for="allChk">All</label>
+                </div>
             </div>
+            <div class="column" id="feeDiv">
+                <fieldset>
+                    <legend>Fee</legend>
+                <div id="feeDivGrp">
+                    <input type="checkbox" id="freeChk" checked>
+                    <label for="freeChk">Free</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" id="paidChk" checked>
+                    <label for="paidChk">Paid</label>
+                </div>
+            </div>            
 			<div class="column" id="dateDiv">
 				 <label for="searchDt">Date:</label>
 				 <input type="date" id="searchDt" name="searchDt"> 

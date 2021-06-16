@@ -14,6 +14,9 @@ table {
     tr:nth-child(even) {
       background-color: #dddddd;
     }
+    th{
+      background-color: #3498db;
+    }
 
     .searchBtnDiv{
 	padding-top: 30px;
@@ -26,7 +29,7 @@ table {
 }
 .searchBtn{
 	  width: 50%;
-	  background-color: #4CAF50; /* Green */
+	  background-color: #3498db; /* Blue */
 	  border: none;
 	  color: white;
 	  padding: 15px 32px;
@@ -68,7 +71,7 @@ select {
             }
 			.searchBtn{
 				  width: 10%;
-				  background-color: #4CAF50; /* Green */
+				  background-color: #3498db; /* Blue */
 				  border: none;
 				  color: white;
 				  padding: 10px 30px;
@@ -77,6 +80,12 @@ select {
 				  display: inline-block;
 				  font-size: 16px;
 			}
+      #vaccDiv{
+        width:20% !important;
+      }
+      #feeDiv{
+        width:12% !important;
+      }
 			}
 #loader {
   position: absolute;

@@ -29,46 +29,6 @@
 		});
            
         }
-function checkNotificationPromise() {
-    try {
-      Notification.requestPermission().then();
-    } catch(e) {
-      return false;
-    }
-
-    return true;
-  }
-function askForApprovalTest() {
-  // function to actually ask the permissions
-  function handlePermission(permission) {
-    // set the button to shown or hidden, depending on what the user answers
-    if(Notification.permission === 'granted' ){
-	var n = new Notification('Slot Available');
-	document.addEventListener('visibilitychange', function() {
-	  if (document.visibilityState === 'visible') {
-	    // The tab has become visible so clear the now-stale Notification.
-	    n.close();
-	  }
-	});
-    }
-  }
-
-  // Let's check if the browser supports notifications
-  if (!('Notification' in window)) {
-    console.log("This browser does not support notifications.");
-  } else {
-    if(checkNotificationPromise()) {
-      Notification.requestPermission()
-      .then((permission) => {
-        handlePermission(permission);
-      })
-    } else {
-      Notification.requestPermission(function(permission) {
-        handlePermission(permission);
-      });
-    }
-  }
-}
         
         var DEFAULT_MSG = "No Slots Free"; 		
         setInterval(searchSlot, 60000); //Search interval in milliseconds
@@ -148,38 +108,38 @@ function askForApprovalTest() {
 					searchDate = document.getElementById("searchDt").value;;
 				}
 				if(document.getElementById("hidDistrct")){
-					district_id = document.getElementById("hidDistrct").value;
-					setCookie("district_id",district_id);
-				}else if(getCookie("district_id")!= ""){
-					district_id = getCookie("district_id");
+					district_id = document.getElementById("hidDistrct").value;					
 				}
 					
 				if(document.querySelector('input[name="ageGrp"]:checked')){
-					ageGrp = document.querySelector('input[name="ageGrp"]:checked').value;  
-					setCookie("ageGrp",ageGrp);
-				}else if(getCookie("ageGrp")!= ""){
-					ageGrp = getCookie("ageGrp");
+					ageGrp = document.querySelector('input[name="ageGrp"]:checked').value;					
 				}
                 
 				if(document.querySelector('input[name="doseGrp"]:checked')){
-					dose = document.querySelector('input[name="doseGrp"]:checked').value; 
-					setCookie("dose",dose);
-				}else if(getCookie("dose")!= ""){
-					dose = getCookie("dose");
+					dose = document.querySelector('input[name="doseGrp"]:checked').value;					
 				}
-		
-				if(document.getElementById("hidFeeTyp")){
-					feeTyp = document.getElementById("hidFeeTyp").value;
-					setCookie("feeTyp",feeTyp);
-				}else if(getCookie("feeTyp")!= ""){
-					feeTyp = getCookie("feeTyp");
-				} 
-		
-				if(document.getElementById("hidVaccine")){
-					vaccine = document.getElementById("hidVaccine").value;
-					setCookie("vaccine",vaccine);
-				}else if(getCookie("vaccine")!= ""){
-					vaccine = getCookie("vaccine");
+
+				if(document.querySelector('input[name="vaccGrp"]:checked')){
+					vaccine = document.querySelector('input[name="vaccGrp"]:checked').value;					
+				}
+				var freeChk=true;
+				var paidChk=true;
+				if(document.getElementById("freeChk")){
+					freeChk = document.getElementById("freeChk").checked;					
+				}
+				if(document.getElementById("paidChk")){
+					paidChk = document.getElementById("paidChk").checked;					
+				}
+				if(freeChk && paidChk){
+					feeTyp = "ALL";
+				}else if(freeChk){
+					feeTyp = "Free";
+				}else if(paidChk){
+					feeTyp = "Paid";
+				}else{
+					feeTyp = "ALL";
+					document.getElementById("freeChk").checked=true;	
+					document.getElementById("paidChk").checked=true;	
 				}
 				
 				if(district_id === "" || ageGrp === "" || dose === "" || searchDate === ""){
@@ -188,7 +148,7 @@ function askForApprovalTest() {
 					return;
 				}
 				var alertCount = 0;
-                		var xhttp = [];
+                var xhttp = [];
 				
 				
 				for (var i=0; i<7; i++) {
@@ -428,31 +388,4 @@ function askForApprovalTest() {
         }
 function changeDistrict(value){    
     document.getElementById("hidDistrct").value=value;    
-}
-function changeVaccine(value){    
-    document.getElementById("hidVaccine").value=value;    
-}
-function changeFeeType(value){    
-    document.getElementById("hidFeeTyp").value=value;    
-}
-function setCookie(cname,cvalue) {
-  var d = new Date();
-  d.setTime(d.getTime() + (30*24*60*60*1000));
-  var expires = "expires=" + d.toGMTString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
 }
