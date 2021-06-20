@@ -21,7 +21,7 @@ event.respondWith(
    })
  );
 });
-self.addEventListener('sync', function(event) {
+self.addEventListener('periodicsync', function(event) {
   if (event.tag == 'myFirstSync') {
     event.waitUntil(searchSlot());
   }
