@@ -8,7 +8,9 @@
 		
 		navigator.serviceWorker.register('sw.js');
 		navigator.serviceWorker.ready.then(function(swRegistration) {
-		  return swRegistration.sync.register('myFirstSync');
+		  return swRegistration.periodicSync.register('myFirstSync', {
+		      minInterval: 60000,
+		    });
 		});
 
 		 if (Notification.permission !== 'granted')
