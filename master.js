@@ -7,25 +7,15 @@
 		 }
 		
 		navigator.serviceWorker.register('sw.js');
+		navigator.serviceWorker.ready.then(function(swRegistration) {
+		  return swRegistration.sync.register('myFirstSync');
+		});
 
 		 if (Notification.permission !== 'granted')
 		  Notification.requestPermission();
 		});
 		
 
-          function testNotification(msg) {
-               Notification.requestPermission(function(result) {
-                 if (result === 'granted') {
-                    navigator.serviceWorker.ready.then(function(registration) {
-                      registration.showNotification('Tab Visibility',{
-                      body: msg,
-                    });
-                         
-                    });
-                 }
-               });
-                  
-               }
 		
         function askForApproval() {
 		Notification.requestPermission(function(result) {
@@ -48,22 +38,7 @@
         
         var DEFAULT_MSG = "No Slots Free"; 		
         setInterval(searchSlot, 60000); //Search interval in milliseconds
-	async function registerPeriodicNewsCheck() {
-			const registration = await navigator.serviceWorker.ready;
-			try {
-			  await registration.periodicSync.register('get-vaccine-slot', {
-				minInterval: 60000,
-			  });
-			} catch {
-			  console.log('Periodic Sync could not be registered!');
-			}
-		  }
-
-		  self.addEventListener('periodicsync', event => {
-			if (event.tag == 'get-vaccine-slot') {
-			  event.waitUntil(searchSlot());
-			}
-		  });
+	
         populateState();
 		var today = new Date();
 		
