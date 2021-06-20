@@ -11,6 +11,31 @@
 		 if (Notification.permission !== 'granted')
 		  Notification.requestPermission();
 		});
+           document.addEventListener('visibilitychange',function(){
+               if (document.visibilityState === 'visible') {
+                    console.log("visability - active tab");
+                 } else {
+                    console.log("visability - inactive tab");
+                    setInterval(() => {
+                         testNotification("In active Tab");
+                    }, 60000);
+                    
+                 }
+          });
+
+          function testNotification(msg) {
+               Notification.requestPermission(function(result) {
+                 if (result === 'granted') {
+                    navigator.serviceWorker.ready.then(function(registration) {
+                      registration.showNotification('Tab Visibility',{
+                      body: msg,
+                    });
+                         
+                    });
+                 }
+               });
+                  
+               }
 		
         function askForApproval() {
 		Notification.requestPermission(function(result) {
