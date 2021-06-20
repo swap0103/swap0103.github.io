@@ -2,7 +2,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
 		 if (!Notification) {
-		  alert('Desktop notifications not available in your browser. Try Chromium.');
+		  console.log('Desktop notifications not available in your browser. Try Chromium.');
 		  return;
 		 }
 		
@@ -11,17 +11,22 @@
 		 if (Notification.permission !== 'granted')
 		  Notification.requestPermission();
 		});
-            document.addEventListener('visibilitychange',function(){
-               if (document.visibilityState === 'visible') {
-                    console.log("visability - active tab");
-                 } else {
-                    console.log("visability - inactive tab");
-                    setTimeout(() => {
-                         testNotification("Inactive Tab");
-                    }, 6000);
-                    
-                 }
-          });
+		async function registerPeriodicNewsCheck() {
+			const registration = await navigator.serviceWorker.ready;
+			try {
+			  await registration.periodicSync.register('get-vaccine-slot', {
+				minInterval: 60000,
+			  });
+			} catch {
+			  console.log('Periodic Sync could not be registered!');
+			}
+		  }
+
+		  self.addEventListener('periodicsync', event => {
+			if (event.tag == 'get-vaccine-slot') {
+			  event.waitUntil(searchSlot());
+			}
+		  });
 
           function testNotification(msg) {
                Notification.requestPermission(function(result) {
