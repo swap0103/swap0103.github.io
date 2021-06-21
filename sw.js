@@ -23,6 +23,6 @@ event.respondWith(
 });
 self.addEventListener('periodicsync', function(event) {
   if (event.tag == 'myFirstSync') {
-    self.searchSlot();
+    console.log("myFirstSync request");
   }
 });
